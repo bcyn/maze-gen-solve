@@ -2,6 +2,8 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 var COLOR_BLACK = '#000';
+var COLOR_GREY = '#333';
+var COLOR_WHITE = '#FFF'
 
 var N = 1 << 0;
 var S = 1 << 1;
@@ -9,14 +11,19 @@ var W = 1 << 2;
 var E = 1 << 3;
 var visited = 1 << 4;
 
-var cellDim = 2;
+var cellDim = 10;
 var cellSpace = 1;
 var wCells = Math.floor((width - cellSpace) / (cellDim + cellSpace));
 var hCells = Math.floor((height - cellSpace) / (cellDim + cellSpace));
 var cells = generateMaze(wCells, hCells);
 
-var cellArray = d3.range(wCells * hCells)
+var parent = d3.range(wCells * hCells)
     .map(function() { return NaN; });
+var previous = (hCells - 1) * wCells;
+var goalX = wCells - 1 - !((wCells & 1) | (hCells & 1));
+var goalY = 0;
+var goalIndex = goalX + goalY * wCells;
+var frontier = [previous];
 
 var xCanvas = Math.round((width - wCells * cellDim - (wCells + 1) * cellSpace) / 2);
 var yCanvas = Math.round((height - hCells * cellDim - (hCells + 1) * cellSpace) / 2);
@@ -26,7 +33,7 @@ var canvas = d3.select("body").append("canvas")
     .attr("height", height);
 var context = canvas.node().getContext("2d");
 context.translate(xCanvas, yCanvas);
-context.fillStyle = COLOR_BLACK;
+context.fillStyle = COLOR_GREY;
 
 for (var i = 0; i < wCells; ++i) {
     for (var j = 0; j < hCells; ++j) {
@@ -46,6 +53,85 @@ for (var i = 0; i < wCells; ++i) {
                 cellDim, 
                 cellSpace);
     }
+}
+
+context.lineWidth = cellDim;
+context.lineCap = "square";
+context.strokeStyle = COLOR_GREY;
+context.translate(cellDim / 2, cellDim / 2);
+
+var randomBase = Math.random() * 360 | 0;
+var randomSat = Math.random() * (1 - 0.3) + 0.3;
+var randomLight = Math.random() * (0.7 - 0.3) + 0.3;
+
+d3.timer(function() {
+    var done;
+    var k = 0;
+    while (++k < 50 && !(done = explore()));
+    return done;
+});
+
+function explore() {
+    if ((i0 = popRandom(frontier)) == null) return true;
+
+    var i0;
+    var x0 = i0 % wCells;
+    var y0 = i0 / wCells | 0;
+    var s0 = score(i0);
+    var i1;
+
+    cells[i0] |= visited;
+
+    var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - 0, 2), 0.5);
+
+    var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
+    context.strokeStyle = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
+    strokePath(previous);
+
+    context.strokeStyle = COLOR_WHITE;
+    strokePath(previous = i0);
+    if (!s0) return true;
+
+    if (cells[i0] & N && !(cells[i1 = i0 - wCells] & visited)) parent[i1] = i0, frontier.push(i1);
+    if (cells[i0] & S && !(cells[i1 = i0 + wCells] & visited)) parent[i1] = i0, frontier.push(i1);
+    if (cells[i0] & W && !(cells[i1 = i0 - 1] & visited)) parent[i1] = i0, frontier.push(i1);
+    if (cells[i0] & E && !(cells[i1 = i0 + 1] & visited)) parent[i1] = i0, frontier.push(i1);
+}
+
+function strokePath(index) {
+    context.beginPath();
+    moveTo(index);
+    while (!isNaN(index = parent[index])) lineTo(index);
+    context.stroke();
+}
+
+function moveTo(index) {
+    var i = index % wCells;
+    var j = index / wCells | 0;
+    context.moveTo(i * cellDim + (i + 1) * cellSpace, j * cellDim + (j + 1) * cellSpace);
+}
+
+function lineTo(index) {
+    var i = index % wCells;
+    var j = index / wCells | 0;
+    context.lineTo(i * cellDim + (i + 1) * cellSpace, j * cellDim + (j + 1) * cellSpace);
+}
+
+function score(i) {
+    var x = goalX - (i % wCells);
+    var y = goalY - (i / wCells | 0);
+    return x * x + y * y;
+}
+
+function popRandom(array) {
+    if (!(n = array.length))
+        return;
+
+    var i = Math.random() * n | 0,
+        t = array[i];
+    array[i] = array[n - 1];
+    array[n - 1] = t;
+    return array.pop();
 }
 
 function generateMaze(width, height) {
@@ -143,3 +229,5 @@ function generateMaze(width, height) {
         previous[index0] = NaN;
     }
 }
+
+
