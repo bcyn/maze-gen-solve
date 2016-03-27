@@ -82,11 +82,18 @@ function explore() {
 
     cells[i0] |= visited;
 
+    var maxDist = Math.pow(Math.pow(wCells - 1, 2) + Math.pow(0 - hCells - 1, 2), 0.5);
     var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - hCells - 1, 2), 0.5);
-    dist *= 1.5;
+    // dist *= 1;
+    dist = dist / maxDist;
     console.log(dist);
 
-    var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
+    // var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
+    var color = d3.hsl(
+            (randomBase + (120) * (dist)) % 360,
+            randomSat + (1 - randomSat) * (dist),
+            randomLight + (0.8 - randomLight) * (dist)
+        ).rgb();
     context.strokeStyle = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
     strokePath(previous);
 
