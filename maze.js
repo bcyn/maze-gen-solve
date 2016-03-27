@@ -11,7 +11,7 @@ var W = 1 << 2;
 var E = 1 << 3;
 var visited = 1 << 4;
 
-var cellDim = 1;
+var cellDim = 2;
 var cellSpace = 1;
 var wCells = Math.floor((width - cellSpace) / (cellDim + cellSpace));
 var hCells = Math.floor((height - cellSpace) / (cellDim + cellSpace));
@@ -83,7 +83,7 @@ function explore() {
     cells[i0] |= visited;
 
     var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - hCells - 1, 2), 0.5);
-    dist *= 1.5;
+    dist *= 1;
     console.log(dist);
 
     var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
