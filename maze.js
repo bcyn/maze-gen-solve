@@ -67,7 +67,7 @@ var randomLight = Math.random() * (0.6 - 0.4) + 0.4;
 d3.timer(function() {
     var done;
     var k = 0;
-    while (++k < 50 && !(done = explore()));
+    while (++k < 20 && !(done = explore()));
     return done;
 });
 
