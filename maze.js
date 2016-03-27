@@ -20,7 +20,7 @@ var cells = generateMaze(wCells, hCells);
 var parent = d3.range(wCells * hCells)
     .map(function() { return NaN; });
 var previous = (hCells - 1) * wCells;
-var goalX = wCells - 1 - !((wCells & 1) | (hCells & 1));
+var goalX = wCells - 1;
 var goalY = 0;
 var goalIndex = goalX + goalY * wCells;
 var frontier = [previous];
@@ -83,6 +83,8 @@ function explore() {
     cells[i0] |= visited;
 
     var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - hCells - 1, 2), 0.5);
+    dist *= 1.5;
+    console.log(dist);
 
     var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
     context.strokeStyle = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
