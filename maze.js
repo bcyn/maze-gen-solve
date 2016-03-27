@@ -61,8 +61,8 @@ context.strokeStyle = COLOR_GREY;
 context.translate(cellDim / 2, cellDim / 2);
 
 var randomBase = Math.random() * 360 | 0;
-var randomSat = Math.random() * (1 - 0.3) + 0.3;
-var randomLight = Math.random() * (0.7 - 0.3) + 0.3;
+var randomSat = Math.random() * (1 - 0.4) + 0.4;
+var randomLight = Math.random() * (0.6 - 0.4) + 0.4;
 
 d3.timer(function() {
     var done;
@@ -82,7 +82,7 @@ function explore() {
 
     cells[i0] |= visited;
 
-    var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - 0, 2), 0.5);
+    var dist = Math.pow(Math.pow(x0 - 0, 2) + Math.pow(y0 - hCells - 1, 2), 0.5);
 
     var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
     context.strokeStyle = 'rgb(' + color.r + ',' + color.g + ',' + color.b + ')';
