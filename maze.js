@@ -11,7 +11,7 @@ var W = 1 << 2;
 var E = 1 << 3;
 var visited = 1 << 4;
 
-var cellDim = 1;
+var cellDim = 2;
 var cellSpace = 3;
 var wCells = Math.floor((width - cellSpace) / (cellDim + cellSpace));
 var hCells = Math.floor((height - cellSpace) / (cellDim + cellSpace));
@@ -63,6 +63,7 @@ context.translate(cellDim / 2, cellDim / 2);
 var randomBase = Math.random() * 360 | 0;
 var randomSat = Math.random() * (0.8 - 0.4) + 0.4;
 var randomLight = Math.random() * (0.6 - 0.4) + 0.4;
+var hueDirection = Math.random() < 0.5 ? -1 : 1;
 
 d3.timer(function() {
     var done;
@@ -89,7 +90,7 @@ function explore() {
 
     // var color = d3.hsl(((dist + randomBase)% 360), randomSat, randomLight).rgb();
     var color = d3.hsl(
-            (randomBase + (120) * (dist)) % 360,
+            (randomBase + (140 * dist * hueDirection)) % 360,
             randomSat + (1 - randomSat) * (dist),
             randomLight + (0.8 - randomLight) * (dist)
         ).rgb();
