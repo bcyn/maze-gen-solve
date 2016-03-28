@@ -3,7 +3,7 @@ var height = window.innerHeight;
 
 var COLOR_BLACK = '#000';
 var COLOR_GREY = '#333';
-var COLOR_WHITE = '#FFF'
+var COLOR_WHITE = '#FFF';
 
 var N = 1 << 0;
 var S = 1 << 1;
@@ -12,7 +12,7 @@ var E = 1 << 3;
 var visited = 1 << 4;
 
 var cellDim = 2;
-var cellSpace = 1;
+var cellSpace = 30;
 var wCells = Math.floor((width - cellSpace) / (cellDim + cellSpace));
 var hCells = Math.floor((height - cellSpace) / (cellDim + cellSpace));
 var cells = generateMaze(wCells, hCells);
@@ -61,7 +61,7 @@ context.strokeStyle = COLOR_GREY;
 context.translate(cellDim / 2, cellDim / 2);
 
 var randomBase = Math.random() * 360 | 0;
-var randomSat = Math.random() * (1 - 0.4) + 0.4;
+var randomSat = Math.random() * (0.8 - 0.4) + 0.4;
 var randomLight = Math.random() * (0.6 - 0.4) + 0.4;
 
 d3.timer(function() {
