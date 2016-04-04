@@ -12,7 +12,7 @@ var E = 1 << 3;
 var visited = 1 << 4;
 
 var cellDim = 1;
-var cellSpace = 1;
+var cellSpace = 5;
 var wCells = Math.floor((width - cellSpace) / (cellDim + cellSpace));
 var hCells = Math.floor((height - cellSpace) / (cellDim + cellSpace));
 var cells = generateMaze(wCells, hCells);
